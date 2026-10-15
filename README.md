@@ -7,7 +7,12 @@
     <a href="https://discord.gg/6NpMhefCK9">Discord</a>
   </p>
 </div>
+# NOTE:
+There seem to be forks of this port that add poorly made functionality and have code copy-pasted.
+Please refrain from using these forks as they have a poor implementation
 
+And FYI: 
+Yes I will work on this in future with all the features (including REAL mods!)
 # Nintendo Switch port
 
 This is a from-scratch port.
