@@ -61,3 +61,9 @@ add_link_options("-L${LIBNX}/lib")
 add_compile_definitions(SWITCH __SWITCH__=1 DUSK_PLATFORM_SWITCH=1 TARGET_SWITCH=1 _DEFAULT_SOURCE)
 
 set(DUSK_SWITCH_SPECS_FLAG "-specs=${LIBNX}/switch.specs" CACHE STRING "libnx specs flag")
+
+# GNU ld supports archive rescanning. Define this at toolchain/root scope:
+# Vulkan::Vulkan may be imported in platforms/switch while dusklight itself
+# is created in its parent directory, where package-local variables vanish.
+set(CMAKE_LINK_GROUP_USING_RESCAN "LINKER:--start-group" "LINKER:--end-group")
+set(CMAKE_LINK_GROUP_USING_RESCAN_SUPPORTED TRUE)
