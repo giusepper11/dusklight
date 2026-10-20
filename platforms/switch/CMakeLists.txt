@@ -73,6 +73,11 @@ if(TARGET Freetype::Freetype)
 endif()
 
 find_package(NXVK QUIET)
+if(NXVK_USE_UPSTREAM_SDK)
+  set(_switch_nvk_dispatch source/switch_nvk_sdk_dispatch.cpp)
+else()
+  set(_switch_nvk_dispatch source/switch_nvk_dispatch.cpp)
+endif()
 
 add_library(dusk_switch_runtime STATIC
   source/switch_posix_shim.cpp
@@ -80,7 +85,7 @@ add_library(dusk_switch_runtime STATIC
   source/switch_fs.cpp
   source/switch_perf.cpp
   source/switch_vulkan_nxvk.cpp
-  source/switch_nvk_dispatch.cpp
+  ${_switch_nvk_dispatch}
   source/switch_audio_audren.cpp
   source/switch_input_hid.cpp
 )
@@ -95,21 +100,24 @@ target_include_directories(dusk_switch_runtime PRIVATE
   "${CMAKE_SOURCE_DIR}/extern/aurora/include/dolphin"
 )
 
-if(NXVK_FOUND)
+if(NXVK_USE_UPSTREAM_SDK)
+  target_link_libraries(dusk_switch_runtime PUBLIC NXVK::nvk)
+elseif(NXVK_FOUND)
   target_include_directories(dusk_switch_runtime PRIVATE ${NXVK_INCLUDE_DIRS})
 endif()
 
-# Generated Mesa headers (vk_dispatch_table.h, vk_common_entrypoints.h) for
-# name-based entrypoint lookup. Points at a configured NXVK build tree.
-set(NXVK_GENERATED_DIR "D:/l4t/nxvk/switch/build/cross" CACHE PATH
-  "Configured NXVK build tree (generated Vulkan headers)")
-if(EXISTS "${NXVK_GENERATED_DIR}/src/vulkan/util/vk_dispatch_table.h")
-  target_include_directories(dusk_switch_runtime PRIVATE
-    "${NXVK_GENERATED_DIR}/src/vulkan/util"
-    "${NXVK_GENERATED_DIR}/src/vulkan/runtime"
-    "${NXVK_GENERATED_DIR}/src/vulkan/wsi")
-else()
-  message(WARNING "SwitchNXVK: NXVK_GENERATED_DIR has no vk_dispatch_table.h; entrypoint lookup will not compile")
+if(NOT NXVK_USE_UPSTREAM_SDK)
+  # The legacy mode alone consumes generated private Mesa headers.
+  set(NXVK_GENERATED_DIR "D:/l4t/nxvk/switch/build/cross" CACHE PATH
+    "Configured NXVK build tree (generated Vulkan headers)")
+  if(EXISTS "${NXVK_GENERATED_DIR}/src/vulkan/util/vk_dispatch_table.h")
+    target_include_directories(dusk_switch_runtime PRIVATE
+      "${NXVK_GENERATED_DIR}/src/vulkan/util"
+      "${NXVK_GENERATED_DIR}/src/vulkan/runtime"
+      "${NXVK_GENERATED_DIR}/src/vulkan/wsi")
+  else()
+    message(WARNING "SwitchNXVK: NXVK_GENERATED_DIR has no vk_dispatch_table.h; entrypoint lookup will not compile")
+  endif()
 endif()
 target_compile_features(dusk_switch_runtime PUBLIC cxx_std_20)
 # Same game headers/defs the game TUs see (dolphin types, TARGET_PC, ...).
@@ -267,7 +275,9 @@ endif()
 
 target_link_options(dusklight PRIVATE "-Wl,--gc-sections")
 
-if(NXVK_FOUND)
+if(NXVK_USE_UPSTREAM_SDK)
+  target_link_options(dusklight PRIVATE "-Wl,--wrap=vk_icdGetInstanceProcAddr")
+elseif(NXVK_FOUND)
   target_link_options(dusklight PRIVATE
     "-Wl,--wrap=nvk_enumerate_physical_device"
     "-Wl,--wrap=nvkmd_try_create_pdev"

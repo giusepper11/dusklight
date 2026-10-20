@@ -2,6 +2,50 @@
 # NXVK_ROOT or DEVKITPRO/portlibs/switch
 
 set(NXVK_ROOT "" CACHE PATH "NXVK root (portlib or source tree)")
+option(NXVK_USE_UPSTREAM_SDK "Use the loaderless Mesa Vulkan CMake SDK" OFF)
+
+if(NXVK_USE_UPSTREAM_SDK)
+  if(NOT NXVK_ROOT)
+    message(FATAL_ERROR "NXVK SDK mode requires an explicit NXVK_ROOT")
+  endif()
+  # Keep target-only searches inside the explicit SDK and existing toolchain.
+  set(_nxvk_saved_find_roots "${CMAKE_FIND_ROOT_PATH}")
+  set(_nxvk_saved_prefixes "${CMAKE_PREFIX_PATH}")
+  set(_nxvk_saved_library_paths "${CMAKE_LIBRARY_PATH}")
+  list(PREPEND CMAKE_FIND_ROOT_PATH "${NXVK_ROOT}")
+  list(PREPEND CMAKE_PREFIX_PATH "${NXVK_ROOT}")
+  list(PREPEND CMAKE_LIBRARY_PATH "${NXVK_ROOT}/lib" "$ENV{DEVKITPRO}/libnx/lib")
+  set(Vulkan_DIR "${NXVK_ROOT}/lib/cmake/Vulkan")
+  find_package(Vulkan CONFIG REQUIRED
+    PATHS "${Vulkan_DIR}" NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)
+  set(CMAKE_FIND_ROOT_PATH "${_nxvk_saved_find_roots}")
+  set(CMAKE_PREFIX_PATH "${_nxvk_saved_prefixes}")
+  set(CMAKE_LIBRARY_PATH "${_nxvk_saved_library_paths}")
+  unset(_nxvk_saved_find_roots)
+  unset(_nxvk_saved_prefixes)
+  unset(_nxvk_saved_library_paths)
+  if(NOT TARGET Vulkan::Vulkan)
+    message(FATAL_ERROR "The selected SDK does not export Vulkan::Vulkan")
+  endif()
+  file(REAL_PATH "${NXVK_ROOT}/lib/libvulkan.a" _nxvk_expected_library)
+  file(REAL_PATH "${Vulkan_LIBRARY}" _nxvk_actual_library)
+  file(REAL_PATH "${NXVK_ROOT}/include" _nxvk_expected_include)
+  file(REAL_PATH "${Vulkan_INCLUDE_DIR}" _nxvk_actual_include)
+  if(NOT _nxvk_actual_library STREQUAL _nxvk_expected_library OR
+     NOT _nxvk_actual_include STREQUAL _nxvk_expected_include)
+    message(FATAL_ERROR "Cached Vulkan paths do not match NXVK_ROOT; use a new build directory")
+  endif()
+  if(NOT TARGET NXVK::nvk)
+    add_library(NXVK::nvk INTERFACE IMPORTED)
+    set_target_properties(NXVK::nvk PROPERTIES
+      INTERFACE_LINK_LIBRARIES Vulkan::Vulkan
+      INTERFACE_COMPILE_DEFINITIONS "__SWITCH__;VK_USE_PLATFORM_VI_NN")
+  endif()
+  set(NXVK_INCLUDE_DIRS "${Vulkan_INCLUDE_DIR}")
+  set(NXVK_LIBRARIES NXVK::nvk)
+  set(NXVK_FOUND TRUE)
+  return()
+endif()
 
 set(_nxvk_roots "")
 if(NXVK_ROOT)
