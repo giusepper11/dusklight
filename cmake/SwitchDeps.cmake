@@ -22,7 +22,7 @@ set(DAWN_PLATFORM_SWITCH ON CACHE BOOL "Dawn Switch backend (enables encounter S
 # Dawn-switch: a local upstream clone + our delta as patches (clone stays pristine).
 # Pass -DFETCHCONTENT_SOURCE_DIR_DAWN=<upstream-clone> to use it; otherwise
 # aurora downloads its pinned encounter tarball.
-if(DEFINED CACHE{FETCHCONTENT_SOURCE_DIR_DAWN})
+if(DEFINED CACHE{FETCHCONTENT_SOURCE_DIR_DAWN} AND NOT "${FETCHCONTENT_SOURCE_DIR_DAWN}" STREQUAL "")
   include(${CMAKE_CURRENT_LIST_DIR}/ApplyDawnSwitchPatch.cmake)
   dusk_switch_apply_dawn_patch("${FETCHCONTENT_SOURCE_DIR_DAWN}")
 endif()
