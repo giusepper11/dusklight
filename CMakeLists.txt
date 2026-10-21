@@ -391,6 +391,7 @@ set(GAME_FILES ${_dusklight_all_files})
 list(FILTER GAME_FILES EXCLUDE REGEX "^src/dusk/")
 
 add_library(dusk_internal OBJECT ${DUSK_INTERNAL_FILES})
+include(cmake/PerformanceMonitorBuild.cmake)
 if (ENABLE_ASAN)
     target_sources(dusk_internal PRIVATE src/dusk/asan_options.c)
 endif ()

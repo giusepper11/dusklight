@@ -1428,6 +1428,12 @@ set(DUSK_FILES
         src/dusk/autosave.cpp
         src/dusk/config.cpp
         src/dusk/config.hpp
+        src/dusk/performance_capture.cpp
+        src/dusk/performance_capture.hpp
+        src/dusk/performance_csv.cpp
+        src/dusk/performance_csv.hpp
+        src/dusk/performance_monitor.cpp
+        src/dusk/performance_monitor.hpp
         src/dusk/data.cpp
         src/dusk/data.hpp
         src/dusk/discord_presence.cpp

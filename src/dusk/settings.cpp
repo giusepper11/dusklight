@@ -20,6 +20,8 @@ UserSettings g_userSettings = {
         .enableVsync {"video.enableVsync", true},
         .lockAspectRatio {"video.lockAspectRatio", false},
         .enableFpsOverlay {"game.enableFpsOverlay", false},
+        .performanceMonitor {"video.performanceMonitor", perf::MonitorMode::Off},
+        .benchmarkSceneLabel {"video.benchmarkSceneLabel", ""},
         .fpsOverlayCorner {"game.fpsOverlayCorner", 0},
         .maxFrameRate {"video.maxFrameRate", 240},
         .rememberWindowSize {"video.rememberWindowSize", false},
@@ -307,6 +309,8 @@ void registerSettings() {
     Register(g_userSettings.video.enableVsync);
     Register(g_userSettings.video.lockAspectRatio);
     Register(g_userSettings.video.enableFpsOverlay);
+    Register(g_userSettings.video.performanceMonitor);
+    Register(g_userSettings.video.benchmarkSceneLabel);
     Register(g_userSettings.video.fpsOverlayCorner);
     Register(g_userSettings.video.maxFrameRate);
     Register(g_userSettings.video.rememberWindowSize);

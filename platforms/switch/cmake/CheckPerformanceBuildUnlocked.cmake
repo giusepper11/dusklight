@@ -1,0 +1,6 @@
+if(NOT DEFINED LOCK_FILE)
+    set(LOCK_FILE "${CMAKE_BINARY_DIR}/.performance-monitor-packaged.json")
+endif()
+if(EXISTS "${LOCK_FILE}")
+    message(FATAL_ERROR "This performance-monitor configuration was packaged and sealed. Use a fresh build directory; never replace its associated NRO.")
+endif()

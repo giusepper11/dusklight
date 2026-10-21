@@ -1,0 +1,20 @@
+{
+  "classification": "source-code/static inspection; no hardware contact",
+  "protected_worktrees": {
+    "dusklight": {
+      "head": "6c242edc38b741ab462d3086a954b01fa61b1220",
+      "status_unchanged": true
+    },
+    "nvk-reference": {
+      "head": "2258b9a194d8477442ede0723b1f04ebdf09c6a3",
+      "status_unchanged": true
+    }
+  },
+  "preserved_baseline_nro": {
+    "path": "/home/gro/dusklight-deko3d/snapshots/nvk-reference-00b7271-shallow/build/switch-nvk-upstream-0ff5207-release/platforms/switch/dusklight.nro",
+    "size": 60670854,
+    "sha256": "c1758fd9d5d66c98eb211b9f4b0c0814aea9d826eb956a5ea3cb9d9d83e2611d"
+  },
+  "submodules": " bc112ad008ecbbb0a4934283c637ad945747667c extern/aurora (heads/dusklight/performance-monitor)\n 0bdba6c50a46409c4862474c72b4a3a631fbe0ec extern/borealis (0bdba6c)\n 93971c38aa7286c59be7c3874a95e12d1a37036a mods/cosmetics (93971c3)\n 641c9c9e0bd04d51f9cb32e08daf7d134c65dcb1 mods/randomizer (641c9c9)\n",
+  "gitleaks_findings": 0
+}

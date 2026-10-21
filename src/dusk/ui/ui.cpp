@@ -11,6 +11,7 @@
 #include "window.hpp"
 
 #include "dusk/config.hpp"
+#include "dusk/performance_monitor.hpp"
 #include "dusk/mods/queue.hpp"
 #include "dusk/mods/updates.hpp"
 
@@ -124,6 +125,7 @@ bool initialize() noexcept {
 }
 
 void shutdown() noexcept {
+    perf::shutdown();
     mods::updates::shutdown();
     mods::queue::shutdown();
     for (auto& drop : sPendingDrops) {
@@ -467,6 +469,7 @@ Document* top_document() noexcept {
 
 void update() noexcept {
     ZoneScopedN("Dusk UI update");
+    perf::update(); // Collection/completion is independent of panel refresh or visibility.
     mods::queue::update();
     mods::updates::update();
     if (!aurora::rmlui::is_initialized()) {

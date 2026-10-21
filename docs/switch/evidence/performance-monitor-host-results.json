@@ -1,0 +1,49 @@
+{
+  "classification": "host tests and static analysis; not hardware validation",
+  "host_tests": {
+    "passed": 22,
+    "failed": 0,
+    "names": [
+      "IoTest.ConvertsUtf8PathsInBothDirections",
+      "IoTest.ReadsAndWritesWholeFiles",
+      "IoTest.ReadsAndWritesAtOffsets",
+      "IoTest.AtomicWriteDoesNotExposePartialContents",
+      "IoTest.PreserveModeSupportsAtomicPatching",
+      "IoTest.AbandonedAtomicWriteKeepsOriginalAndRemovesTemporaryFile",
+      "IoTest.CardFileIoDelegatesExactOffsetOperations",
+      "TimeTest.ScalesGameTimeWithoutScalingNativeTime",
+      "TimeTest.ScaleChangesPreserveContinuity",
+      "TimeTest.ExplicitAndLifecyclePausesAreIndependent",
+      "TimeTest.MultiplePauseReasonsMustAllClear",
+      "TimeTest.InvalidScalesAreIgnoredAndLargeScalesAreClamped",
+      "RenderWorkerQueue.PreservesOrdering",
+      "RenderWorkerQueue.PushBlocksWhenFull",
+      "RenderWorkerTest.SyncWaitsForPriorWork",
+      "RenderWorkerTest.ShutdownCompletesQueuedWork",
+      "RenderWorkerFrameSlots.RecyclesReleasedSlots",
+      "ThreadTest.DestructorRequestsStopAndJoins",
+      "performance_measurement",
+      "performance_csv",
+      "performance_deadline_regressions",
+      "aurora_present_observer"
+    ]
+  },
+  "package_regressions": {
+    "passed": 9,
+    "log": "../logs/performance-monitor/38-final-host-tests.log"
+  },
+  "sanitizers": {
+    "address_undefined": "PASS: 31-review-fixes-asan-ubsan.log and 40-csv-final-asan-ubsan.log",
+    "thread": "PASS: 32-review-fixes-tsan.log and 20-tsan.log"
+  },
+  "worker_race": {
+    "original": {
+      "iterations": 10000,
+      "failures": 450
+    },
+    "fixed": {
+      "iterations": 10000,
+      "failures": 0
+    }
+  }
+}

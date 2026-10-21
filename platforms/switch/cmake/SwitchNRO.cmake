@@ -15,7 +15,10 @@ function(switch_target_link_libnx target)
 endfunction()
 
 function(switch_add_nro target)
-  cmake_parse_arguments(ARG "" "TITLE;AUTHOR;VERSION;ICON;ROMFSDIR" "" ${ARGN})
+  cmake_parse_arguments(ARG "" "TITLE;AUTHOR;VERSION;ICON;ROMFSDIR;OUTPUT_NAME" "" ${ARGN})
+  if(NOT ARG_OUTPUT_NAME)
+    set(ARG_OUTPUT_NAME "${target}")
+  endif()
   if(NOT ARG_TITLE)
     set(ARG_TITLE "${target}")
   endif()
@@ -36,7 +39,7 @@ function(switch_add_nro target)
     VERBATIM
   )
 
-  set(_nro "${CMAKE_CURRENT_BINARY_DIR}/${target}.nro")
+  set(_nro "${CMAKE_CURRENT_BINARY_DIR}/${ARG_OUTPUT_NAME}.nro")
   set(_nro_deps "$<TARGET_FILE:${target}>" "${_nacp}")
   set(_nro_cmd "${ELF2NRO}" "$<TARGET_FILE:${target}>" "${_nro}" "--nacp=${_nacp}")
   if(ARG_ICON AND EXISTS "${ARG_ICON}")
@@ -49,6 +52,8 @@ function(switch_add_nro target)
 
   add_custom_command(
     OUTPUT "${_nro}"
+    COMMAND "${CMAKE_COMMAND}" "-DLOCK_FILE=${CMAKE_BINARY_DIR}/.performance-monitor-packaged.json"
+      -P "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/CheckPerformanceBuildUnlocked.cmake"
     COMMAND ${_nro_cmd}
     DEPENDS ${_nro_deps} ${target}
     VERBATIM

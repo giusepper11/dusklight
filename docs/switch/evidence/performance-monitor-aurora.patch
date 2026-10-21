@@ -1,0 +1,190 @@
+diff --git a/include/aurora/gfx.h b/include/aurora/gfx.h
+index 0aec8a0..2732d88 100644
+--- a/include/aurora/gfx.h
++++ b/include/aurora/gfx.h
+@@ -38,6 +38,24 @@ typedef struct {
+ const AuroraStats* aurora_get_stats();
+ float aurora_get_fps();
+ 
++// Host-observed successful Surface::Present return, BEFORE SaltyNX/pacing work.
++// Not a physical scanout-completion timestamp or calibrated GPU duration.
++// Draw counts are the worker's latest recorded counts, not a public frame-ID API.
++// Pipeline counters are independently atomically sampled, asynchronous totals.
++typedef struct {
++  uint64_t timestampNs;
++  uint64_t presentationId;
++  uint32_t drawCalls;
++  uint32_t mergedDrawCalls;
++  uint32_t pipelinesCreated;
++  uint32_t pipelinesQueued;
++} AuroraPresentEvent;
++typedef void (*AuroraPresentCallback)(const AuroraPresentEvent* event);
++// Callback runs on the serialized presentation producer, must not block/throw,
++// and must copy the event before returning. A concurrent unregister can leave
++// one callback in flight; its target must outlive renderer shutdown.
++void aurora_set_present_callback(AuroraPresentCallback callback);
++
+ void aurora_enable_vsync(bool enabled);
+ 
+ #ifdef __cplusplus
+diff --git a/lib/aurora.cpp b/lib/aurora.cpp
+index 5c7122a..7ad2fa1 100644
+--- a/lib/aurora.cpp
++++ b/lib/aurora.cpp
+@@ -385,6 +385,7 @@ void end_frame() noexcept {
+         }
+       }
+       if (status == wgpu::Status::Success) {
++        gfx::notify_present_return();
+         saltynx::on_present();
+         gfx::after_present();
+       } else {
+diff --git a/lib/gfx/frame.cpp b/lib/gfx/frame.cpp
+index f39d8ce..406a3b5 100644
+--- a/lib/gfx/frame.cpp
++++ b/lib/gfx/frame.cpp
+@@ -2,6 +2,7 @@
+ 
+ #include "depth_peek.hpp"
+ #include "pipeline_cache.hpp"
++#include "present_observer.hpp"
+ #include "recording.hpp"
+ #include "render_worker.hpp"
+ #include "resource_cache.hpp"
+@@ -41,6 +42,7 @@ namespace {
+ constexpr Module Log{"aurora::gfx"};
+ 
+ Resources g_resources;
++PresentObserver g_presentObserver;
+ 
+ enum class BufferMapState {
+   Unmapped,
+@@ -770,6 +772,22 @@ void gpu_synchronize() { render_worker::synchronize(); }
+ 
+ void synchronize() { render_worker::synchronize(); }
+ 
++void notify_present_return() noexcept {
++  if (!g_presentObserver.enabled()) {
++    return;
++  }
++  const auto now = timestamp_ns(PresentClock::now());
++  uint32_t created = 0, queued = 0;
++  snapshot_pipeline_counts(created, queued);
++  g_presentObserver.publish({now > 0 ? static_cast<uint64_t>(now) : 0, 0,
++                             g_resources.stats.drawCallCount, g_resources.stats.mergedDrawCallCount,
++                             created, queued});
++}
++
++void set_present_callback(AuroraPresentCallback callback) noexcept {
++  g_presentObserver.setCallback(callback);
++}
++
+ void after_present() noexcept {
+   const auto now = PresentClock::now();
+   const int64_t nowNs = timestamp_ns(now);
+@@ -802,3 +820,6 @@ float calculate_fps() noexcept {
+ 
+ const AuroraStats* aurora_get_stats() { return &aurora::gfx::detail::resources().stats; }
+ float aurora_get_fps() { return aurora::gfx::calculate_fps(); }
++void aurora_set_present_callback(AuroraPresentCallback callback) {
++  aurora::gfx::set_present_callback(callback);
++}
+diff --git a/lib/gfx/frame.hpp b/lib/gfx/frame.hpp
+index 2a9ae43..1168b7a 100644
+--- a/lib/gfx/frame.hpp
++++ b/lib/gfx/frame.hpp
+@@ -44,5 +44,6 @@ uint32_t current_frame() noexcept;
+ void after_submit() noexcept;
+ void gpu_synchronize();
+ void after_present() noexcept;
++void notify_present_return() noexcept;
+ float calculate_fps() noexcept;
+ } // namespace aurora::gfx
+diff --git a/lib/gfx/pipeline_cache.cpp b/lib/gfx/pipeline_cache.cpp
+index e0fb585..e8509b6 100644
+--- a/lib/gfx/pipeline_cache.cpp
++++ b/lib/gfx/pipeline_cache.cpp
+@@ -358,6 +358,7 @@ static std::atomic_ref createdPipelines{detail::resources().stats.createdPipelin
+ #else
+ struct AtomicStatRef {
+   uint32_t& ref;
++  uint32_t load(std::memory_order) const { return __atomic_load_n(&ref, __ATOMIC_RELAXED); }
+   uint32_t operator++() { return __atomic_add_fetch(&ref, 1, __ATOMIC_RELAXED); }
+   uint32_t operator--() { return __atomic_sub_fetch(&ref, 1, __ATOMIC_RELAXED); }
+   uint32_t operator++(int) { return __atomic_fetch_add(&ref, 1, __ATOMIC_RELAXED); }
+@@ -371,6 +372,11 @@ static AtomicStatRef queuedPipelines{detail::resources().stats.queuedPipelines};
+ static AtomicStatRef createdPipelines{detail::resources().stats.createdPipelines};
+ #endif
+ 
++void snapshot_pipeline_counts(uint32_t& created, uint32_t& queued) noexcept {
++  created = createdPipelines.load(std::memory_order_relaxed);
++  queued = queuedPipelines.load(std::memory_order_relaxed);
++}
++
+ template <typename PipelineConfig>
+ static PipelineCacheWrite make_pipeline_cache_write(ShaderType type, PipelineRef hash, const PipelineConfig& config,
+                                                     uint32_t firstFrameUsed) {
+diff --git a/lib/gfx/pipeline_cache.hpp b/lib/gfx/pipeline_cache.hpp
+index b3d1e86..b545582 100644
+--- a/lib/gfx/pipeline_cache.hpp
++++ b/lib/gfx/pipeline_cache.hpp
+@@ -27,6 +27,8 @@ void shutdown_pipeline_cache();
+ void begin_pipeline_frame();
+ void end_pipeline_frame();
+ void rebuild_pipeline_cache();
++// Independent atomic snapshots; not per-frame counters.
++void snapshot_pipeline_counts(uint32_t& created, uint32_t& queued) noexcept;
+ 
+ PipelineRef find_pipeline(const gx::PipelineConfig& config, const RenderTargetLayout& layout);
+ PipelineRef find_pipeline(const clear::PipelineConfig& config, const RenderTargetLayout& layout);
+diff --git a/lib/gfx/present_observer.hpp b/lib/gfx/present_observer.hpp
+new file mode 100644
+index 0000000..91f3711
+--- /dev/null
++++ b/lib/gfx/present_observer.hpp
+@@ -0,0 +1,29 @@
++#pragma once
++
++#include <aurora/gfx.h>
++#include <atomic>
++
++namespace aurora::gfx {
++
++// Single serialized presentation producer; callback may be changed by the UI.
++// There is no userdata whose lifetime could end while a callback is in flight.
++class PresentObserver {
++public:
++  bool enabled() const noexcept { return mCallback.load(std::memory_order_acquire) != nullptr; }
++  void setCallback(AuroraPresentCallback callback) noexcept {
++    mCallback.store(callback, std::memory_order_release);
++  }
++  void publish(AuroraPresentEvent event) noexcept {
++    if (const auto callback = mCallback.load(std::memory_order_acquire)) {
++      event.presentationId = ++mSequence;
++      callback(&event);
++    }
++  }
++
++private:
++  static_assert(std::atomic<AuroraPresentCallback>::is_always_lock_free);
++  std::atomic<AuroraPresentCallback> mCallback{nullptr};
++  uint64_t mSequence = 0;
++};
++
++} // namespace aurora::gfx
+diff --git a/lib/gfx/render_worker.cpp b/lib/gfx/render_worker.cpp
+index 60c1421..53e5a15 100644
+--- a/lib/gfx/render_worker.cpp
++++ b/lib/gfx/render_worker.cpp
+@@ -48,8 +48,10 @@ void worker_main(std::stop_token token) {
+       ZoneScopedN("QueueItem work");
+       item->work();
+     }
+-    complete_sync(item->sync);
+     g_pendingItems.fetch_sub(1, std::memory_order_acq_rel);
++    // Publish completed-work bookkeeping BEFORE acknowledging synchronize().
++    // Otherwise its waiter can wake while is_idle() still sees this sync item.
++    complete_sync(item->sync);
+     if (item->type == ItemType::Shutdown) {
+       break;
+     }

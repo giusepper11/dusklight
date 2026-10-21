@@ -1,0 +1,33 @@
+{
+  "recorded_at_utc": "2026-10-21T19:15:01Z",
+  "evidence_class": "source-code evidence and static artifact inspection",
+  "hardware_contact_authorized": false,
+  "worktrees": {
+    "dusklight": {
+      "head": "6c242edc38b741ab462d3086a954b01fa61b1220",
+      "status": " M docs/switch/STATUS.md\n M docs/switch/artifact.json\n M docs/switch/evidence/log-manifest.json\n?? docs/switch/evidence/nvk-hardware-20261021T013051Z-deployment-intent.json\n?? docs/switch/evidence/nvk-hardware-20261021T013051Z-nxlink-transfer-receipt.json\n?? docs/switch/evidence/nvk-hardware-20261021T013051Z-nxlink-transfer.log\n?? docs/switch/evidence/nvk-hardware-20261021T013051Z-observation-01-ui-pipeline-dialog.json\n?? docs/switch/evidence/nvk-hardware-20261021T013051Z-observation-02-pipeline-build-finished.json\n?? docs/switch/evidence/nvk-hardware-20261021T013051Z-observation-03-gameplay-smoke-pass.json\n?? docs/switch/evidence/nvk-hardware-20261021T013051Z-observation-04-repeat-launch-pipelines.json\n",
+      "staged": "",
+      "index_flags": "",
+      "submodules": " 3227d76c60e1e782ca576610bce61c9e7744d8be extern/aurora (remotes/origin/fix-png-201-g3227d76)\n 4ac5e7052a8c49a122f8d57f626b5c75c5ca6968 extern/borealis (4ac5e70)\n fd93491089fa95441789244f2b2fd22a451ecbcc mods/cosmetics (heads/main)\n 1f24e81303536db4b77f49d057a8ec1f11162000 mods/randomizer (remotes/origin/versioning-71-g1f24e81)\n"
+    },
+    "nvk-reference": {
+      "head": "2258b9a194d8477442ede0723b1f04ebdf09c6a3",
+      "status": "",
+      "staged": "",
+      "index_flags": "",
+      "submodules": " 6d9f9d9fe8952aada5274154645610042d0a036e extern/aurora (remotes/origin/fix-png-189-g6d9f9d9)\n 0bdba6c50a46409c4862474c72b4a3a631fbe0ec extern/borealis (0bdba6c)\n 93971c38aa7286c59be7c3874a95e12d1a37036a mods/cosmetics (93971c3)\n 641c9c9e0bd04d51f9cb32e08daf7d134c65dcb1 mods/randomizer (641c9c9)\n"
+    },
+    "performance-monitor": {
+      "head": "2258b9a194d8477442ede0723b1f04ebdf09c6a3",
+      "status": "",
+      "staged": "",
+      "index_flags": "",
+      "submodules": " 6d9f9d9fe8952aada5274154645610042d0a036e extern/aurora (remotes/origin/fix-png-189-g6d9f9d9)\n 0bdba6c50a46409c4862474c72b4a3a631fbe0ec extern/borealis (0bdba6c)\n 93971c38aa7286c59be7c3874a95e12d1a37036a mods/cosmetics (93971c3)\n 641c9c9e0bd04d51f9cb32e08daf7d134c65dcb1 mods/randomizer (641c9c9)\n"
+    }
+  },
+  "baseline_artifact": {
+    "path": "/home/gro/dusklight-deko3d/snapshots/nvk-reference-00b7271-shallow/build/switch-nvk-upstream-0ff5207-release/platforms/switch/dusklight.nro",
+    "size": 60670854,
+    "sha256": "c1758fd9d5d66c98eb211b9f4b0c0814aea9d826eb956a5ea3cb9d9d83e2611d"
+  }
+}

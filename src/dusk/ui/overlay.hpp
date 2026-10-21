@@ -33,6 +33,7 @@ private:
     clock::time_point mMenuNotificationStartTime;
     clock::time_point mPipelineProgressStartTime;
     Uint64 mFpsLastUpdate = 0;
+    int mFpsMonitorMode = -1;
     uint32_t mPipelineBatchCreatedBase = 0;
     uint32_t mLastQueuedPipelines = 0;
     bool mPipelineProgressActive = false;

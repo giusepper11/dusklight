@@ -1,0 +1,12 @@
+{
+  "classification": "static security scan of staged added lines",
+  "finding_counts": {
+    "hardcoded_credentials": 0,
+    "shell_injection": 0,
+    "dynamic_execution": 0,
+    "unsafe_deserialization": 0,
+    "sql_interpolation": 0
+  },
+  "exact_dependency_patch_preserved": true,
+  "whitespace_gate": "source checked; only raw exact diff context excluded from text-file whitespace gate"
+}

@@ -235,6 +235,14 @@ fps {
     white-space: nowrap;
 }
 
+fps[detailed] {
+    white-space: pre-wrap;
+    font-size: var(--font-size-sm);
+    font-family: var(--font-family-monospace);
+    max-width: 600dp;
+    background-color: rgba(var(--color-black-rgb), 75%);
+}
+
 speedrun-timer {
     display: none;
     position: absolute;

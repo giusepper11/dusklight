@@ -22,6 +22,7 @@
 #include "dusk/imgui/ImGuiEngine.hpp"
 #include "dusk/language.hpp"
 #include "dusk/livesplit.h"
+#include "dusk/performance_monitor.hpp"
 #include "dusk/presentation.hpp"
 #include "dusk/speedrun.h"
 
@@ -260,6 +261,21 @@ Rml::String configured_data_path_display_name() {
     }
     return display;
 }
+
+class PerformanceSummaryText : public Component {
+public:
+    explicit PerformanceSummaryText(Rml::Element* parent) : Component(append(parent, "p")) {}
+    void update() override {
+        const auto text = perf::benchmark_summary();
+        if (text != mText) {
+            set_text_content(mRoot, text);
+            mText = text;
+        }
+        Component::update();
+    }
+private:
+    std::string mText;
+};
 
 class DataFolderPathText : public Component {
 public:
@@ -732,54 +748,110 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             });
         leftPane.register_control(
             leftPane.add_select_button({
-                .key = "Show FPS Counter",
+                .key = "Performance Monitor",
+                .getValue = [] {
+                    switch (perf::mode()) {
+                    case perf::MonitorMode::Basic: return Rml::String{"Basic"};
+                    case perf::MonitorMode::Detailed: return Rml::String{"Detailed"};
+                    default: return Rml::String{"Off"};
+                    }
+                },
+                .isModified = [] { return perf::mode() != perf::MonitorMode::Off; },
+            }),
+            rightPane, [](Pane& pane) {
+                constexpr std::array names{"Off", "Basic", "Detailed"};
+                for (int i = 0; i < 3; ++i) {
+                    const auto value = static_cast<perf::MonitorMode>(i);
+                    pane.add_button({.text = names[i],
+                                     .isSelected = [value] { return perf::mode() == value; }})
+                        .on_pressed([value] {
+                            mDoAud_seStartMenu(kSoundItemChange);
+                            getSettings().video.performanceMonitor.setValue(value);
+                            // Preserve legacy JSON keys, but avoid conflicting enables.
+                            getSettings().video.enableFpsOverlay.setValue(false);
+                            perf::update();
+                            config::save();
+                        });
+                }
+                pane.add_text("Basic preserves the existing FPS counter. Detailed adds recent "
+                              "successful-present-return interval statistics and worker/async counters. "
+                              "Presentation intervals are not GPU render time. Off stops continuous "
+                              "interval collection unless an explicit benchmark is running.");
+            });
+        leftPane.register_control(
+            leftPane.add_select_button({
+                .key = "Performance Monitor Corner",
                 .getValue =
                     [] {
-                        if (!getSettings().video.enableFpsOverlay.getValue()) {
-                            return Rml::String{"Off"};
-                        }
-                        const int idx = getSettings().video.fpsOverlayCorner.getValue();
+                        const int idx = std::clamp(getSettings().video.fpsOverlayCorner.getValue(), 0, 3);
                         return Rml::String{kFpsOverlayCornerNames[idx]};
                     },
                 .isModified =
                     [] {
-                        const auto& enable = getSettings().video.enableFpsOverlay;
                         const auto& corner = getSettings().video.fpsOverlayCorner;
-                        return enable.getValue() != enable.getDefaultValue() ||
-                               (enable.getValue() && corner.getValue() != corner.getDefaultValue());
+                        return corner.getValue() != corner.getDefaultValue();
                     },
             }),
             rightPane, [](Pane& pane) {
-                pane.add_button(
-                        {
-                            .text = "Off",
-                            .isSelected =
-                                [] { return !getSettings().video.enableFpsOverlay.getValue(); },
-                        })
-                    .on_pressed([] {
-                        mDoAud_seStartMenu(kSoundItemChange);
-                        getSettings().video.enableFpsOverlay.setValue(false);
-                        config::save();
-                    });
                 for (int i = 0; i < static_cast<int>(kFpsOverlayCornerNames.size()); ++i) {
                     pane.add_button(
                             {
                                 .text = kFpsOverlayCornerNames[i],
                                 .isSelected =
                                     [i] {
-                                        return getSettings().video.enableFpsOverlay.getValue() &&
-                                               getSettings().video.fpsOverlayCorner.getValue() == i;
+                                        return getSettings().video.fpsOverlayCorner.getValue() == i;
                                     },
                             })
                         .on_pressed([i] {
                             mDoAud_seStartMenu(kSoundItemChange);
-                            getSettings().video.enableFpsOverlay.setValue(true);
                             getSettings().video.fpsOverlayCorner.setValue(i);
                             config::save();
                         });
                 }
-                pane.add_rml(
-                    "<br/>Display the current framerate in a corner of the screen while playing.");
+                pane.add_text("Position the optional performance panel without changing its display mode.");
+            });
+        leftPane.register_control(
+            leftPane.add_select_button({
+                .key = "Benchmark Scene Label",
+                .getValue = [] {
+                    const auto& label = getSettings().video.benchmarkSceneLabel.getValue();
+                    return label.empty() ? Rml::String{"Unspecified"} : label.substr(0, 160);
+                },
+                .isModified = [] { return !getSettings().video.benchmarkSceneLabel.getValue().empty(); },
+            }), rightPane, [](Pane& pane) {
+                for (const auto label : {"", "Faron Woods, facing the waterfall"}) {
+                    const std::string value{label};
+                    pane.add_button({.text = value.empty() ? "Unspecified" : value,
+                                     .isSelected = [value] {
+                                         return getSettings().video.benchmarkSceneLabel.getValue() == value;
+                                     }})
+                        .on_pressed([value] {
+                            getSettings().video.benchmarkSceneLabel.setValue(value);
+                            config::save();
+                        });
+                }
+                pane.add_text("Manual label only; this does not detect or change the game location. "
+                              "A custom label can also be set in video.benchmarkSceneLabel in settings JSON.");
+            });
+        leftPane.register_control(
+            leftPane.add_button({.text = "Start Benchmark",
+                                 .isDisabled = [this] { return mPrelaunch || perf::capture_active(); }})
+                .on_pressed([] { perf::start_benchmark(); }),
+            rightPane, [](Pane& pane) { pane.add_child<PerformanceSummaryText>(); });
+        leftPane.register_control(
+            leftPane.add_button({.text = "Stop Benchmark",
+                                 .isDisabled = [] { return !perf::capture_active(); }})
+                .on_pressed([] { perf::stop_benchmark(); }),
+            rightPane, [](Pane& pane) { pane.add_child<PerformanceSummaryText>(); });
+        leftPane.register_control(
+            leftPane.add_button({.text = "Export Results",
+                                 .isDisabled = [] { return perf::capture_active() || !perf::has_results(); }})
+                .on_pressed([] { perf::export_results(); }),
+            rightPane, [](Pane& pane) {
+                pane.add_text("Writes a uniquely named raw CSV in benchmarks under the active data folder. "
+                              "No export happens during capture. Install the matching host build manifest "
+                              "as performance-monitor-build.json in that data folder to associate the NRO SHA-256.");
+                pane.add_child<PerformanceSummaryText>();
             });
         #ifndef __SWITCH__
         config_bool_select(leftPane, rightPane, getSettings().video.rememberWindowSize,

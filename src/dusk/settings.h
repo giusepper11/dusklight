@@ -3,6 +3,7 @@
 #include <array>
 
 #include "dusk/config_var.hpp"
+#include "dusk/performance_capture.hpp"
 #include "dusk/ui/controls.hpp"
 
 namespace dusk {
@@ -94,6 +95,12 @@ enum class AudioOutputMode : u8 {
 };
 
 namespace config {
+template <>
+struct ConfigEnumRange<perf::MonitorMode> {
+    static constexpr auto min = perf::MonitorMode::Off;
+    static constexpr auto max = perf::MonitorMode::Detailed;
+};
+
 template <>
 struct ConfigEnumRange<BloomMode> {
     static constexpr auto min = BloomMode::Off;
@@ -189,6 +196,8 @@ struct UserSettings {
         ConfigVar<bool> enableVsync;
         ConfigVar<bool> lockAspectRatio;
         ConfigVar<bool> enableFpsOverlay;
+        ConfigVar<perf::MonitorMode> performanceMonitor;
+        ConfigVar<std::string> benchmarkSceneLabel;
         ConfigVar<int> fpsOverlayCorner;
         ConfigVar<int> maxFrameRate;
         ConfigVar<bool> rememberWindowSize;

@@ -7,6 +7,7 @@
 #include "dusk/achievements.h"
 #include "dusk/action_bindings.h"
 #include "dusk/livesplit.h"
+#include "dusk/performance_monitor.hpp"
 #include "dusk/settings.h"
 #include "dusk/speedrun.h"
 
@@ -270,9 +271,19 @@ void Overlay::update() {
     }
 
     if (mFpsCounter != nullptr) {
-        if (getSettings().video.enableFpsOverlay.getValue()) {
-            const int idx = getSettings().video.fpsOverlayCorner.getValue();
+        const auto monitorMode = perf::mode();
+        if (mFpsMonitorMode != static_cast<int>(monitorMode)) {
+            mFpsLastUpdate = 0;
+            mFpsMonitorMode = static_cast<int>(monitorMode);
+        }
+        if (monitorMode != perf::MonitorMode::Off) {
+            const int idx = std::clamp(getSettings().video.fpsOverlayCorner.getValue(), 0, 3);
             mFpsCounter->SetAttribute("open", "");
+            if (monitorMode == perf::MonitorMode::Detailed) {
+                mFpsCounter->SetAttribute("detailed", "");
+            } else {
+                mFpsCounter->RemoveAttribute("detailed");
+            }
             mFpsCounter->RemoveProperty(Rml::PropertyId::Bottom);
             mFpsCounter->SetAttribute("corner", kFpsCorners[idx]);
 
@@ -299,7 +310,8 @@ void Overlay::update() {
                 static_cast<double>(now - mFpsLastUpdate) >= 0.5 * static_cast<double>(perfFreq);
             if (refreshLabel) {
                 mFpsLastUpdate = now;
-                set_text_content(mFpsCounter, fmt::format("{:.0f} FPS", fps));
+                set_text_content(mFpsCounter, monitorMode == perf::MonitorMode::Detailed
+                    ? perf::detailed_text(fps) : fmt::format("{:.0f} FPS", fps));
             }
         } else {
             mFpsCounter->RemoveAttribute("open");

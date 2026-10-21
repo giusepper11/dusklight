@@ -1,0 +1,10 @@
+#pragma once
+namespace dusk::perf::build {
+inline constexpr char Id[] = "@DUSK_PERFORMANCE_BUILD_ID@";
+inline constexpr char GameRevision[] = "@PERF_GAME_REV@";
+inline constexpr char AuroraRevision[] = "@PERF_AURORA_REV@";
+inline constexpr bool SourceDirty = @PERF_SOURCE_DIRTY@;
+inline constexpr char Compiler[] = "@PERF_COMPILER@";
+inline constexpr char Toolchain[] = "@DUSK_PERFORMANCE_TOOLCHAIN_ID@";
+inline constexpr char VulkanBackend[] = "@PERF_VULKAN_BACKEND@";
+}

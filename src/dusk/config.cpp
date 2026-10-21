@@ -299,6 +299,7 @@ template class ConfigImpl<f32>;
 template class ConfigImpl<f64>;
 template class ConfigImpl<std::string>;
 template class ConfigImpl<BloomMode>;
+template class ConfigImpl<perf::MonitorMode>;
 template class ConfigImpl<DepthOfFieldMode>;
 template class ConfigImpl<DiscVerificationState>;
 template class ConfigImpl<GameLanguage>;

@@ -1,0 +1,15 @@
+{
+  "float calculate_fps()": {
+    "unchanged": true,
+    "sha256": "03b6176ea050e4b0c713512e7fd5f810a55871333b39e5b488561f36fc042a48"
+  },
+  "void after_present() noexcept": {
+    "unchanged": true,
+    "sha256": "13651991b91b2a27250405c4e3db68d6146ba41487eaeddd2e5e2a57948b013b"
+  },
+  "float aurora_get_fps()": {
+    "unchanged": true,
+    "sha256": "642f0168d199090773391f405f8e76d48e254e6c0118a12e8fb0cbb6fd6ae77b"
+  },
+  "classification": "static analysis; not a device/UI runtime claim"
+}
