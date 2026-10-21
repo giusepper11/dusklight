@@ -1,6 +1,32 @@
 # NVK Performance Monitor — local feature
 
-**Status: implementation under local build/review validation; hardware unverified.**
+**Status: HOST/BUILD PASS — HARDWARE UNVERIFIED.**
+
+## Verified local delivery
+
+- Built game source: `5080a855f2be7a39331da44d2facb2598feb8940`.
+- Aurora: `bc112ad008ecbbb0a4934283c637ad945747667c` (dedicated local changes).
+- NRO: `build/performance-monitor-delivery/dusklight-performance-monitor-5080a855f2be-d9171fdb.nro`.
+- Size: **60,978,262 bytes**.
+- SHA-256: `4921a90236d0100a326aff17ac07431a07c3d05e6738dfabd70ce5b78811e455`.
+- Associated sidecar: `build/performance-monitor-delivery/performance-monitor-build.json`.
+- Host results: **22/22 CTest tests, 9/9 package regressions**, ASan/UBSan and
+  ThreadSanitizer checks passed. Fixed worker synchronization stress: **10,000/10,000**.
+- Independent timing/concurrency, packaging and final security/logic reviews passed
+  after their material findings were fixed and regression-tested.
+- Actual NRO and independent real-`elf2nro` reconstruction were byte-identical.
+  AArch64 PIE/public symbols/no strong undefineds, NRO/ASET, 16-KiB NACP and all
+  **35 ROMFS resources** passed. **72 packaged SDK files** matched their receipt.
+- Source/dependency identities and clean configured sources were verified. The real
+  sealed-configuration guard rejected reuse; delivered bytes remained unchanged.
+- Original NVK/deko3d heads, existing dirty evidence and original tested NRO were
+  rechecked unchanged. No merge, push, release, PR, deployment or hardware run.
+
+`evidence/performance-monitor-build-result.json` records the full changed-file
+list, exact build/verification commands and static artifact report.
+`evidence/performance-monitor-log-manifest.json` hashes the raw successful and
+negative command evidence. A later documentation-only evidence commit does not
+change the compiled source revision above. Generated artifacts are not committed.
 
 This feature is isolated in `switch/performance-monitor`, worktree
 `/home/gro/dusklight-deko3d/performance-monitor`, from NVK game source

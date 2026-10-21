@@ -1,0 +1,235 @@
+{
+  "classification": "raw command/evidence files, including negative and corrected attempts",
+  "files": [
+    {
+      "path": "logs/performance-monitor/01-statistics-red.log",
+      "size": 230,
+      "sha256": "11dbbdf49414302b26d4c7c4564f321359eb529f354d3b9efb4ef245c2d73801"
+    },
+    {
+      "path": "logs/performance-monitor/02-statistics-green.log",
+      "size": 46,
+      "sha256": "d61d06205b46fda4a1d6d0d2d1b4a2f7fe13600e8b2b037a20d11a7bd870f48a"
+    },
+    {
+      "path": "logs/performance-monitor/03-invalid-statistics-red.log",
+      "size": 104,
+      "sha256": "690aaed4a1df2192963f6fcf515eeac0c500b4fd2060ee3174567ebb83c03992"
+    },
+    {
+      "path": "logs/performance-monitor/04-statistics-green.log",
+      "size": 113,
+      "sha256": "96bb9ebe05a732c97347a66bca42129aadaa1b1509454ba2fab411fd1b660cd8"
+    },
+    {
+      "path": "logs/performance-monitor/05-capture-red.log",
+      "size": 644,
+      "sha256": "62bca66cf0cf09a1973c1ddb2a3aab78a2dd55d44136b97b0d860033d7426c04"
+    },
+    {
+      "path": "logs/performance-monitor/06-capture-green.log",
+      "size": 170,
+      "sha256": "a72472275727adc6124518499aca258b1ffc9a6284de126459012613ae7f34ed"
+    },
+    {
+      "path": "logs/performance-monitor/07-publication-red.log",
+      "size": 4804,
+      "sha256": "072c2744304a528c31fb0f76aadaad7b5d84bcbfcc545feae888364153eb2c39"
+    },
+    {
+      "path": "logs/performance-monitor/08-publication-green.log",
+      "size": 332,
+      "sha256": "9bde367fd5b5d378287f8b7f7f12939020072601111dba3fea68c7ba6d155f52"
+    },
+    {
+      "path": "logs/performance-monitor/09-configure-initial.log",
+      "size": 47025,
+      "sha256": "bd53c9ae06fe36c6f7af9ff77a2d10e0dbce87887fec5d0b4f42eb9068c7bb57"
+    },
+    {
+      "path": "logs/performance-monitor/10-observer-red.log",
+      "size": 215,
+      "sha256": "7613e141096baf60ef2585eae9ba89c366d079a47a58e595f2cb7427aaf8f8dd"
+    },
+    {
+      "path": "logs/performance-monitor/11-observer-green.log",
+      "size": 90,
+      "sha256": "d63ec9d315eeb92bc0212d660204ba1de6ae5a52bf4ac09fed86bc77f7371d45"
+    },
+    {
+      "path": "logs/performance-monitor/12-dependency-build.log",
+      "size": 6973165,
+      "sha256": "9f72abdff1b5a951ec18af301279527798b92646791bc4d1c8706207201bc29d"
+    },
+    {
+      "path": "logs/performance-monitor/13-csv-red.log",
+      "size": 214,
+      "sha256": "e441d474ae8847e918e7f17759a0e640734b759978d759174745eaf53ccc54cb"
+    },
+    {
+      "path": "logs/performance-monitor/14-csv-green.log",
+      "size": 179,
+      "sha256": "daec2843a4cc08ebdb338f4c8b3a3c32807ccc9ef3c2c7e1497e51cd8f28930b"
+    },
+    {
+      "path": "logs/performance-monitor/15-host-tests.log",
+      "size": 22411,
+      "sha256": "4b4c5cdaf0202ae57186ee4183b0094990dbc12dfdfb577c570ad554de998e3f"
+    },
+    {
+      "path": "logs/performance-monitor/16-host-tests.log",
+      "size": 31001,
+      "sha256": "ca4280c03ac5d68bd3b9994bd59010005f452a96e5e761d943c49343f51fc543"
+    },
+    {
+      "path": "logs/performance-monitor/17-artifact-validation-red.log",
+      "size": 601,
+      "sha256": "375b66dd22e8b88c4874eaa8054d3ca03a9251cf93dc7ea70459feea1efde5be"
+    },
+    {
+      "path": "logs/performance-monitor/18-artifact-validation-green.log",
+      "size": 1870,
+      "sha256": "bde4948b30600dae8ac5784033ed1f63d44dc3a01a493c76253989034a7f8785"
+    },
+    {
+      "path": "logs/performance-monitor/19-asan-ubsan.log",
+      "size": 606,
+      "sha256": "eb51f6d0eca89edf5353294f7b640c202b956591614c2b947ca0fba49378d70b"
+    },
+    {
+      "path": "logs/performance-monitor/20-tsan.log",
+      "size": 422,
+      "sha256": "f86af2b4e00298117e84a99d7ddc659f0afecb26a61560a525c7c61aeb3fa14a"
+    },
+    {
+      "path": "logs/performance-monitor/21-upstream-sync-race-red.log",
+      "size": 443085,
+      "sha256": "98d8ea9771656c4e21c96c28ec200f9786819cdd3684c382d6addc3ead7397e3"
+    },
+    {
+      "path": "logs/performance-monitor/22-feature-cross-compile.log",
+      "size": 26743,
+      "sha256": "2d467b7201a38befc520a5cfbd02402c15d01516144d6d07c78dd8c47d5a32f3"
+    },
+    {
+      "path": "logs/performance-monitor/23-artifact-validation-green.log",
+      "size": 554,
+      "sha256": "e65d05e8f74701a7c673b442db84063913edc960e70751c46a654bf4a37453eb"
+    },
+    {
+      "path": "logs/performance-monitor/24-upstream-sync-race-stress-red.log",
+      "size": 4567786,
+      "sha256": "63406b37c7e983b21594fb6a0e3ffa6eb344f155437a94e9a7ad3a832c19b674"
+    },
+    {
+      "path": "logs/performance-monitor/25-review-regressions-red.log",
+      "size": 3344,
+      "sha256": "dae24cf3c364c2d6c7418f51e6b05f78301fb1c7ade1b9f89f7d3f2a29e94aa8"
+    },
+    {
+      "path": "logs/performance-monitor/26-review-defects-red.log",
+      "size": 121,
+      "sha256": "52757e9f05c79f7647e4927bce1f07f612aca9fb5c231d7510726cf8eb201296"
+    },
+    {
+      "path": "logs/performance-monitor/27-review-regressions-green.log",
+      "size": 492,
+      "sha256": "6fdc6b4660d7f155c9dc02618bea3c452fec6dd647c277b24d2dd0b11a96b607"
+    },
+    {
+      "path": "logs/performance-monitor/28-host-tests-fixed.log",
+      "size": 11671,
+      "sha256": "0d3e673abb119b5bea381d5e904b82b1200082bfb2981e6dc2372c27f7a48817"
+    },
+    {
+      "path": "logs/performance-monitor/29-feature-cross-compile.log",
+      "size": 801725,
+      "sha256": "9335eaa96dc0437efdf154ca4ccf55a9e277647df6bce850ed688ed2bd1fff6d"
+    },
+    {
+      "path": "logs/performance-monitor/30-upstream-sync-race-stress-green.log",
+      "size": 4439086,
+      "sha256": "a4491dd131ea5550bd56b7df8c6f28bbd1ed4a16778b5a346d143326bb2ee0d7"
+    },
+    {
+      "path": "logs/performance-monitor/31-review-fixes-asan-ubsan.log",
+      "size": 603,
+      "sha256": "01c0b7e3d9c8decf4faf4333ffc4527eef35355fe5b16d16fc450f853ac39baf"
+    },
+    {
+      "path": "logs/performance-monitor/32-review-fixes-tsan.log",
+      "size": 419,
+      "sha256": "bdcd111a257d9f953d7161b96778b02500ac33d38416475bd7d34f3280680969"
+    },
+    {
+      "path": "logs/performance-monitor/33-game-library-build.log",
+      "size": 339,
+      "sha256": "f5547cc2a0c4196f273d2b80f355528e37a8b79113040147f4b6921d8f06d9e4"
+    },
+    {
+      "path": "logs/performance-monitor/34-csv-io-faults-red.log",
+      "size": 1982,
+      "sha256": "a034edbb668d1693007b96df18907f46085c719767483bac0637810ae58881e5"
+    },
+    {
+      "path": "logs/performance-monitor/35-csv-io-faults-green.log",
+      "size": 186,
+      "sha256": "918d085a46bbc61eeeb8305febe3da2b18bba2df84c02e027240056c7aedefe2"
+    },
+    {
+      "path": "logs/performance-monitor/36-package-review-regressions-red.log",
+      "size": 2086,
+      "sha256": "cfad5a68644555493f2544307a871906dd9ecc46c74dcb06cf85ef9a6fe1e35c"
+    },
+    {
+      "path": "logs/performance-monitor/37-package-review-regressions-green.log",
+      "size": 7257,
+      "sha256": "6ecb1f880f33c763913c257eb7868e5aaca7d388a6a8a6d86ea6d9fbe9be3f27"
+    },
+    {
+      "path": "logs/performance-monitor/38-final-host-tests.log",
+      "size": 18261,
+      "sha256": "702cea1d7a6a22f12da7cdb9450cd4780a148a8c7f2da6988719f684dfed83cc"
+    },
+    {
+      "path": "logs/performance-monitor/39-feature-cross-compile-final.log",
+      "size": 28820,
+      "sha256": "d12b5aa991b0d2b0a03381440a84c8b88084e59c3a1666b2b0e336d488124035"
+    },
+    {
+      "path": "logs/performance-monitor/40-csv-final-asan-ubsan.log",
+      "size": 190,
+      "sha256": "91e2536686da32c4a6209befa82c597c114687792c1b9ff518139f7ae69ed6bc"
+    },
+    {
+      "path": "logs/performance-monitor/41-configuration-id-rotation.log",
+      "size": 19141,
+      "sha256": "12513e1433cdca33bdf7f9a4742f7ed0cec04d379ab458e515f38bf833d1232b"
+    },
+    {
+      "path": "logs/performance-monitor/42-staged-gitleaks.json",
+      "size": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "logs/performance-monitor/43-game-objects-build.log",
+      "size": 4889055,
+      "sha256": "cfdf1260be19d3b97066fbb0c5fd71a908e35cfaffa3928211437043b0e4e062"
+    },
+    {
+      "path": "logs/performance-monitor/44-committed-nro-build-and-verification.log",
+      "size": 2235180,
+      "sha256": "d1cd3d139e575f8d0db3970b0b14f43f787f4f0e61fd1cbcd1988021d8993810"
+    },
+    {
+      "path": "logs/performance-monitor/45-real-sealed-build-guard.log",
+      "size": 266,
+      "sha256": "46cc235e0a1dd82dfbe8c29c4b243e84dc5ea8a656ff956939d62497e98493e3"
+    },
+    {
+      "path": "logs/performance-monitor/build-id-before-rotation.json",
+      "size": 356,
+      "sha256": "72dfb801bf20b875c0c5db2808ae3ae05eb35b2e0a020eb9b0db0b6be292d492"
+    }
+  ]
+}

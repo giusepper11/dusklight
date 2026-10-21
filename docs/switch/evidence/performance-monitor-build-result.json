@@ -1,0 +1,162 @@
+{
+  "classification": "cross-build and static artifact verification; host test evidence separately recorded; hardware unverified",
+  "status": "HOST/BUILD PASS \u2014 HARDWARE UNVERIFIED",
+  "source_commit": "5080a855f2be7a39331da44d2facb2598feb8940",
+  "source_tree": "f7bbd82da250a0755f7b6c7ec117ae0b7e265d93",
+  "feature_branch": "switch/performance-monitor",
+  "artifact": {
+    "path": "/home/gro/dusklight-deko3d/performance-monitor/build/performance-monitor-delivery/dusklight-performance-monitor-5080a855f2be-d9171fdb.nro",
+    "size_bytes": 60978262,
+    "sha256": "4921a90236d0100a326aff17ac07431a07c3d05e6738dfabd70ce5b78811e455"
+  },
+  "changed_files": [
+    "CMakeLists.txt",
+    "cmake/PerformanceMonitorBuild.cmake",
+    "cmake/performance_build_identity.hpp.in",
+    "docs/switch/PERFORMANCE_MONITOR.md",
+    "docs/switch/evidence/performance-monitor-aurora.patch",
+    "docs/switch/evidence/performance-monitor-configuration-id-test.json",
+    "docs/switch/evidence/performance-monitor-host-results.json",
+    "docs/switch/evidence/performance-monitor-original-fps-static.json",
+    "docs/switch/evidence/performance-monitor-preflight.json",
+    "docs/switch/evidence/performance-monitor-protection-check.json",
+    "docs/switch/evidence/performance-monitor-review.json",
+    "docs/switch/evidence/performance-monitor-security-scan.json",
+    "extern/aurora",
+    "files.cmake",
+    "platforms/switch/CMakeLists.txt",
+    "platforms/switch/cmake/CheckPerformanceBuildUnlocked.cmake",
+    "platforms/switch/cmake/SwitchNRO.cmake",
+    "platforms/switch/performance-monitor/verify_artifact.py",
+    "res/rml/overlay.rcss",
+    "src/dusk/config.cpp",
+    "src/dusk/performance_capture.cpp",
+    "src/dusk/performance_capture.hpp",
+    "src/dusk/performance_csv.cpp",
+    "src/dusk/performance_csv.hpp",
+    "src/dusk/performance_monitor.cpp",
+    "src/dusk/performance_monitor.hpp",
+    "src/dusk/settings.cpp",
+    "src/dusk/settings.h",
+    "src/dusk/ui/overlay.cpp",
+    "src/dusk/ui/overlay.hpp",
+    "src/dusk/ui/settings.cpp",
+    "src/dusk/ui/ui.cpp",
+    "tests/performance-monitor/CMakeLists.txt",
+    "tests/performance_csv_test.cpp",
+    "tests/performance_deadline_test.cpp",
+    "tests/performance_monitor_test.cpp",
+    "tests/present_observer_test.cpp",
+    "tests/test_performance_artifact.py"
+  ],
+  "verification": {
+    "status": "HOST/BUILD PASS \u2014 HARDWARE UNVERIFIED",
+    "package": {
+      "nro_size_without_assets": 53043200,
+      "nacp_title": "Dusklight",
+      "nacp_size": 16384,
+      "romfs_size": 7897716,
+      "romfs_file_count": 35,
+      "icon_sha256": "cc5e321c4977214dd6b13396faf77b0245430d8700fbb3f20f167dd554555e23",
+      "nacp_sha256": "5c69e163065672b37ab42a6d083da85cf563025706c1b6c5fbc14feb09e26032",
+      "romfs_sha256": "d6411adc5f7587b2e6199cc200870e1a7722ae21ba6078b31ea9299b43fa5ade"
+    },
+    "elf": {
+      "architecture": "AArch64",
+      "elf_type": "PIE",
+      "sha256": "2a70aa2eb4752433eda5f756c75e54a59b8962b91936b69c5e524289b0a0525c"
+    },
+    "elf_nro_binding": {
+      "method": "independent elf2nro regeneration from verified ELF and original packaging inputs",
+      "byte_identical": true,
+      "sha256": "4921a90236d0100a326aff17ac07431a07c3d05e6738dfabd70ce5b78811e455",
+      "command": [
+        "/opt/devkitpro/tools/bin/elf2nro",
+        "build/switch-nvk-performance-monitor-release/dusklight.elf",
+        "/home/gro/dusklight-deko3d/performance-monitor/build/performance-monitor-delivery/validation-rebuilt.nro",
+        "--nacp=build/switch-nvk-performance-monitor-release/platforms/switch/dusklight.nacp",
+        "--icon=/home/gro/dusklight-deko3d/performance-monitor/platforms/switch/icon.jpg",
+        "--romfsdir=build/switch-nvk-performance-monitor-release/platforms/switch/romfs"
+      ]
+    },
+    "sdk_receipt_sha256": "d92dfc1ac8f9aa2e76730c4874d1d30bea4e78205824672e1c9b9ae3f5e44256",
+    "sdk_files_verified": 72,
+    "resources_verified": 35,
+    "hardware_contact": false,
+    "manifest": {
+      "build_id": "d9171fdb4f85b5d52ed02343e1915fa2",
+      "game_source_revision": "5080a855f2be7a39331da44d2facb2598feb8940",
+      "aurora_source_revision": "bc112ad008ecbbb0a4934283c637ad945747667c",
+      "source_dirty_at_configure": false,
+      "compiler": "GNU 15.2.0",
+      "toolchain_image": "sha256:6611f256a5f9c97ff9b934c7a7c0ec26552aee0fe94d4cd59d849def637e376c",
+      "nro_sha256": "4921a90236d0100a326aff17ac07431a07c3d05e6738dfabd70ce5b78811e455",
+      "nro_size_bytes": 60978262,
+      "artifact_filename": "dusklight-performance-monitor-5080a855f2be-d9171fdb.nro",
+      "mesa_source_revision": "0ff52079ca9e9e837ed27eb95a8d239f439a1864",
+      "nro_hash_origin": "host-verified completed build artifact",
+      "hardware_execution": false
+    }
+  },
+  "commands": {
+    "configure": [
+      "cmake",
+      "--preset",
+      "switch-devkitA64-release",
+      "-B",
+      "build/switch-nvk-performance-monitor-release",
+      "-UCMAKE_EXE_LINKER_FLAGS",
+      "-DNXVK_USE_UPSTREAM_SDK=ON",
+      "-DNXVK_ROOT=/home/gro/dusklight-deko3d/builds/mesa-upstream-0ff5207/output/sdk",
+      "-DDUSK_PERFORMANCE_TOOLCHAIN_ID=sha256:6611f256a5f9c97ff9b934c7a7c0ec26552aee0fe94d4cd59d849def637e376c"
+    ],
+    "build": [
+      "cmake",
+      "--build",
+      "build/switch-nvk-performance-monitor-release",
+      "--target",
+      "dusklight_nro",
+      "--parallel",
+      "4",
+      "--verbose"
+    ],
+    "verify": [
+      "python3",
+      "platforms/switch/performance-monitor/verify_artifact.py",
+      "--nro",
+      "build/switch-nvk-performance-monitor-release/platforms/switch/dusklight-performance-monitor.nro",
+      "--elf",
+      "build/switch-nvk-performance-monitor-release/dusklight.elf",
+      "--identity",
+      "build/switch-nvk-performance-monitor-release/performance-build-identity.json",
+      "--sdk-root",
+      "/home/gro/dusklight-deko3d/builds/mesa-upstream-0ff5207/output/sdk",
+      "--output-dir",
+      "build/performance-monitor-delivery",
+      "--nm",
+      "/opt/devkitpro/devkitA64/bin/aarch64-none-elf-nm",
+      "--elf2nro",
+      "/opt/devkitpro/tools/bin/elf2nro",
+      "--toolchain-image",
+      "sha256:6611f256a5f9c97ff9b934c7a7c0ec26552aee0fe94d4cd59d849def637e376c"
+    ]
+  },
+  "container": {
+    "image": "dusklight-mesa-upstream:0ff5207-toolchain",
+    "image_id": "sha256:6611f256a5f9c97ff9b934c7a7c0ec26552aee0fe94d4cd59d849def637e376c",
+    "user": "1000:1000",
+    "workdir": "/home/gro/dusklight-deko3d/performance-monitor"
+  },
+  "real_sealed_configuration_guard": {
+    "rejected_reuse": true,
+    "expected_exit_code": 1
+  },
+  "generated_dependency_bundle": {
+    "path": "build/performance-monitor-dependencies/aurora-performance-monitor.bundle",
+    "sha256": "37effaeb0505097b490275144943acca0c51dcac982bd1341cd34b556cc16bad",
+    "requires_base_commit": "6d9f9d9fe8952aada5274154645610042d0a036e"
+  },
+  "emulator_tests": false,
+  "instrumented_hardware_execution": false,
+  "publication": false
+}
