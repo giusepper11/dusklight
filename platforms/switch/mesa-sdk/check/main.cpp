@@ -1,5 +1,6 @@
 // Link-only Switch check. This executable is not run or deployed.
 #include <vulkan/vulkan.h>
+#include <cstdlib>
 extern "C" VKAPI_ATTR PFN_vkVoidFunction VKAPI_CALL
 vk_icdGetInstanceProcAddr(VkInstance instance, const char* name);
 
@@ -13,6 +14,7 @@ Proc volatile required_procs[] = {
     reinterpret_cast<Proc>(&vkEnumerateInstanceVersion),
     reinterpret_cast<Proc>(&vkCreateViSurfaceNN),
     reinterpret_cast<Proc>(&vk_icdGetInstanceProcAddr),
+    reinterpret_cast<Proc>(&posix_memalign),
 };
 int main() {
     // Keep every relocation live without invoking Vulkan or touching hardware.

@@ -102,6 +102,7 @@ target_include_directories(dusk_switch_runtime PRIVATE
 
 if(NXVK_USE_UPSTREAM_SDK)
   target_link_libraries(dusk_switch_runtime PUBLIC NXVK::nvk)
+  target_compile_definitions(dusk_switch_runtime PRIVATE DUSK_SWITCH_NVK_UPSTREAM_SDK=1)
 elseif(NXVK_FOUND)
   target_include_directories(dusk_switch_runtime PRIVATE ${NXVK_INCLUDE_DIRS})
 endif()
@@ -276,7 +277,8 @@ endif()
 target_link_options(dusklight PRIVATE "-Wl,--gc-sections")
 
 if(NXVK_USE_UPSTREAM_SDK)
-  target_link_options(dusklight PRIVATE "-Wl,--wrap=vk_icdGetInstanceProcAddr")
+  target_link_options(dusklight PRIVATE
+    "-Wl,--wrap=vk_icdGetInstanceProcAddr" "-Wl,--wrap=posix_memalign")
 elseif(NXVK_FOUND)
   target_link_options(dusklight PRIVATE
     "-Wl,--wrap=nvk_enumerate_physical_device"

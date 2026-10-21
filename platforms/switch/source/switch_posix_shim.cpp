@@ -118,7 +118,14 @@ long sysconf(int name) {
   }
 }
 
+// The loaderless Mesa archive supplies its own strong posix_memalign. Keep
+// this existing validated implementation for game-facing calls without
+// replacing or modifying Mesa's internal definition in SDK mode.
+#if defined(DUSK_SWITCH_NVK_UPSTREAM_SDK)
+int __wrap_posix_memalign(void** memptr, size_t alignment, size_t size) {
+#else
 int posix_memalign(void** memptr, size_t alignment, size_t size) {
+#endif
   if (memptr == nullptr || alignment < sizeof(void*) || (alignment & (alignment - 1)) != 0) {
     return EINVAL;
   }
