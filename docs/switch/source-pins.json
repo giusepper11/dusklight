@@ -1,0 +1,48 @@
+{
+  "format_version": 1,
+  "scope": "Source fixture pins only. No binary, toolchain, runtime archive or private research evidence is distributed.",
+  "public_game_base": "77705f8bb95ef7b7dca4675b149c4bcb6a48da34",
+  "container": "devkitpro/devkita64@sha256:1fc388c3a0d34bd2045a6dadcb1020e069d5f876a187fd705de14b4440c00282",
+  "probe_linked_library": {
+    "package": "deko3d 0.5.0-1",
+    "path": "/opt/devkitpro/libnx/lib/libdeko3dd.a",
+    "sha256": "ea458c2b32448ed35520258d72775c52ecea2d480f0c01b236a6dc86d536e9bb",
+    "source_commit": null,
+    "identity_note": "Pinned installed artifact; NOT built from the reference deko3d HEAD."
+  },
+  "uam_cli": {
+    "package": "uam 1.1.0-1",
+    "sha256": "5c3cdb84f000fd683c7440b7b2fbddc2cbb0d7d90d3bf8a2ae3908fe94a1c413",
+    "note": "Synthetic GLSL compilation only; NOT the runtime libuam required by the Dawn reference."
+  },
+  "game_dawn_pin": "1155e0ed531126f33a1279afa029349651ca1c93",
+  "sources": [
+    {
+      "role": "deko3d-source-reference-not-linked",
+      "remote": "https://github.com/devkitPro/deko3d.git",
+      "commit": "373bfd43d8b2d805fa2eb7d406dbb823032df958"
+    },
+    {
+      "role": "dawn-deko3d-patch-origin",
+      "remote": "https://github.com/dorPXP/driftdroid.git",
+      "commit": "8b33d31016a8b8735fe35b4fb633c491d33774c6"
+    },
+    {
+      "role": "sdl-host-tests",
+      "remote": "https://github.com/libsdl-org/SDL.git",
+      "commit": "8e37db5e797b6167f3a00d697d816a684bd259c7"
+    },
+    {
+      "role": "googletest-host-tests",
+      "remote": "https://github.com/google/googletest.git",
+      "commit": "52eb8108c5bdec04579160ae17225d66034bd723"
+    }
+  ],
+  "libnx_notice_revision": "7644c9b26099aa2d2145bc72a21ee24190e92085",
+  "submodules": {
+    "extern/aurora": "3227d76c60e1e782ca576610bce61c9e7744d8be",
+    "extern/borealis": "4ac5e7052a8c49a122f8d57f626b5c75c5ca6968",
+    "mods/cosmetics": "fd93491089fa95441789244f2b2fd22a451ecbcc",
+    "mods/randomizer": "1f24e81303536db4b77f49d057a8ec1f11162000"
+  }
+}
